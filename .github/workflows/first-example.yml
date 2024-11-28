@@ -6,6 +6,8 @@ jobs:
     first_job:
         runs-on: ubuntu-latest
         steps:
+        - name: Checkout
+          uses: actions/checkout@v4.2.2
         - name: Welcome Message
           run: echo "My first job"
         - name: List file
