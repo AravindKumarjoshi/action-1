@@ -1,16 +1,39 @@
 #name which will dispaly in ACTION tab
-name: My First Workflow
-on: push  # when to trigger this actio.we can add multiple trigger eg: [push, merge]
+# name: My First Workflow
+# on: push  # when to trigger this actio.we can add multiple trigger eg: [push, merge]
+
+# jobs:
+#     first_job:
+#         runs-on: ubuntu-latest
+#         steps:
+#         - name: Checkout
+#           uses: actions/checkout@v4.2.2
+#         - name: Welcome Message
+#           run: echo "My first job"
+#         - name: List file
+#           run: ls
+#         - name: Read File
+#           run: cat README.md
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - feature/ci
+  issue_comment:
+    types: [created, edited]
 
 jobs:
-    first_job:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v4.2.2
-        - name: Welcome Message
-          run: echo "My first job"
-        - name: List file
-          run: ls
-        - name: Read File
-          run: cat README.md
+  build:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        run: echo 'Running Build.....'
+
+  deploy:
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'deploy')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "Deploying the application..."
