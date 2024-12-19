@@ -47,8 +47,8 @@ jobs:
 
     - name: Set Environment Variables
       run: |
-        echo "AZURE_WEBAPP_NAME=${{ env[format('AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}" >> $GITHUB_ENV
-        echo "AZURE_WEBAPP_NAME=${{ format(''AZURE_WEBAPP_NAME_{0}',matrix.environment) }} >> $GITHUB_ENV
+        # echo "AZURE_WEBAPP_NAME=${{ env[format('AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}" >> $GITHUB_ENV
+        echo "AZURE_WEBAPP_NAME=${{ format(''AZURE_WEBAPP_NAME_{0}',matrix.environment) }}" >> $GITHUB_ENV
         echo "AZURE_PUBLISH_PROFILE=${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', matrix.environment)] }}" >> $GITHUB_ENV
 
     - name: Deploy to ${{ matrix.environment }} Environment
