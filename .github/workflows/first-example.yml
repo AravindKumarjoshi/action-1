@@ -30,7 +30,7 @@ jobs:
         # AZURE_WEBAPP_NAME=${{ vars.AZURE_WEBAPP_NAME_matrix.environment }}
         # echo "$AZURE_WEBAPP_NAME" >> $GITHUB_ENV
         echo "AZURE_PUBLISH_PROFILE=${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', matrix.environment)] }}" >> $GITHUB_ENV
-        echo $GITHUB_ENV
+        echo "$GITHUB_ENV"
 
     - name: Deploy to ${{ matrix.environment }} Environment
       run: |
