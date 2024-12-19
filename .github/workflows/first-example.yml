@@ -23,7 +23,7 @@ jobs:
       - name: Set environment variables using Python
         id: set-env-vars
         run: |
-          python .github/scripts/set_env_vars.py ${{ matrix.environment }}
+          python .github/scripts/set_env.py ${{ matrix.environment }}
       
       - name: Display the variable
         if: |
