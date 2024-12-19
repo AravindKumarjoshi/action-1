@@ -10,23 +10,6 @@ on:
       - development
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v2
-
-  #   - name: Set up Node.js
-  #     uses: actions/setup-node@v2
-  #     with:
-  #       node-version: '14'
-
-  #   - name: Install dependencies
-  #     run: npm install
-
-  #   - name: Build the project
-  #     run: npm run build
 
   deploy:
     # needs: build
@@ -36,12 +19,7 @@ jobs:
       matrix:
         environment: [TEST, PROD]
         # include:
-        #   - environment: test
-        #     if: ${{ github.event.pull_request.base.ref == 'development' }}
-        #   - environment: prod
-        #     if: ${{ github.event.pull_request.base.ref == 'main' }}
-          # echo "AZURE_WEBAPP_NAME=${{ env[format('AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}" >> $GITHUB_ENV
-         # echo "AZURE_WEBAPP_NAME=${{ format('AZURE_WEBAPP_NAME_{0}',matrix.environment) }}" >> $GITHUB_ENV
+
 
     steps:
     - name: Checkout code
@@ -49,9 +27,10 @@ jobs:
 
     - name: Set Environment Variables
       run: |
-        AZURE_WEBAPP_NAME=${{ vars[format{'AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}
-        echo "$AZURE_WEBAPP_NAME" >> $GITHUB_ENV
+        # AZURE_WEBAPP_NAME=${{ vars.AZURE_WEBAPP_NAME_matrix.environment }}
+        # echo "$AZURE_WEBAPP_NAME" >> $GITHUB_ENV
         echo "AZURE_PUBLISH_PROFILE=${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', matrix.environment)] }}" >> $GITHUB_ENV
+        echo $GITHUB_ENV
 
     - name: Deploy to ${{ matrix.environment }} Environment
       run: |
@@ -61,3 +40,11 @@ jobs:
       # with:
       #   app-name: ${{ env.AZURE_WEBAPP_NAME }}
       #   publish-profile: ${{ env.AZURE_PUBLISH_PROFILE }}
+
+              #   - environment: test
+        #     if: ${{ github.event.pull_request.base.ref == 'development' }}
+        #   - environment: prod
+        #     if: ${{ github.event.pull_request.base.ref == 'main' }}
+          # echo "AZURE_WEBAPP_NAME=${{ env[format('AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}" >> $GITHUB_ENV
+         # echo "AZURE_WEBAPP_NAME=${{ format('AZURE_WEBAPP_NAME_{0}',matrix.environment) }}" >> $GITHUB_ENV
+         #AZURE_WEBAPP_NAME=${{ vars[format{'AZURE_WEBAPP_NAME_{0}',matrix.environment)] }}
