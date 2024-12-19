@@ -34,7 +34,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [test, prod]
+        environment: [TEST, PROD]
         # include:
         #   - environment: test
         #     if: ${{ github.event.pull_request.base.ref == 'development' }}
@@ -52,8 +52,8 @@ jobs:
 
     - name: Deploy to ${{ matrix.environment }} Environment
       run: |
-         echo "AZURE_WEBAPP_NAME"
-         echo "AZURE_PUBLISH_PROFILE"
+         echo "$AZURE_WEBAPP_NAME"
+         echo "$AZURE_PUBLISH_PROFILE"
       # uses: azure/webapps-deploy@v2
       # with:
       #   app-name: ${{ env.AZURE_WEBAPP_NAME }}
