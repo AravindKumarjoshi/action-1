@@ -1,16 +1,60 @@
-#name which will dispaly in ACTION tab
-name: My First Workflow
-on: push  # when to trigger this actio.we can add multiple trigger eg: [push, merge]
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - development
 
 jobs:
-    first_job:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v4.2.2
-        - name: Welcome Message
-          run: echo "My first job"
-        - name: List file
-          run: ls
-        - name: Read File
-          run: cat README.md
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+
+  #   - name: Set up Node.js
+  #     uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '14'
+
+  #   - name: Install dependencies
+  #     run: npm install
+
+  #   - name: Build the project
+  #     run: npm run build
+
+  deploy:
+    # needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [test, prod]
+        # include:
+        #   - environment: test
+        #     if: ${{ github.event.pull_request.base.ref == 'development' }}
+        #   - environment: prod
+        #     if: ${{ github.event.pull_request.base.ref == 'main' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set Environment Variables
+      run: |
+        echo "AZURE_WEBAPP_NAME=${{ env['AZURE_WEBAPP_NAME_' + matrix.environment | upper] }}" >> $GITHUB_ENV
+        echo "AZURE_PUBLISH_PROFILE=${{ secrets['AZURE_PUBLISH_PROFILE_' + matrix.environment | upper] }}" >> $GITHUB_ENV
+
+    - name: Deploy to ${{ matrix.environment | capitalize }} Environment
+      run: |
+         echo "AZURE_WEBAPP_NAME"
+         echo "AZURE_PUBLISH_PROFILE"
+      # uses: azure/webapps-deploy@v2
+      # with:
+      #   app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      #   publish-profile: ${{ env.AZURE_PUBLISH_PROFILE }}
