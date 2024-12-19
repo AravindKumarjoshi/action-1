@@ -22,12 +22,12 @@ jobs:
 
       - name: Set environment variables using Python
         id: set-env-vars
+        if: (github.event.name == 'push' && ${{ matrix.environment }} == 'qa')
         run: |
           python .github/scripts/set_env.py ${{ matrix.environment }}
       
       - name: Display the variable
-        if: |
-           (github.event.name == 'push' && ${{ matrix.environment }} == 'qa')
+        if: (github.event.name == 'push' && ${{ matrix.environment }} == 'qa')
         run: |
            echo $app_service_name
            echo $publish_profile
