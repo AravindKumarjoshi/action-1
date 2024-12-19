@@ -1,39 +1,46 @@
-#name which will dispaly in ACTION tab
-# name: My First Workflow
-# on: push  # when to trigger this actio.we can add multiple trigger eg: [push, merge]
-
-# jobs:
-#     first_job:
-#         runs-on: ubuntu-latest
-#         steps:
-#         - name: Checkout
-#           uses: actions/checkout@v4.2.2
-#         - name: Welcome Message
-#           run: echo "My first job"
-#         - name: List file
-#           run: ls
-#         - name: Read File
-#           run: cat README.md
-name: Build and Deploy
+name: Deploy
 
 on:
   push:
     branches:
-      - feature/ci
-  issue_comment:
-    types: [created, edited]
+      - main
+      - release/*
+      - feature/*
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
-    if: github.event_name == 'push'
+  deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [qa, test, prod]
     steps:
       - name: Checkout code
-        run: echo 'Running Build.....'
+        uses: actions/checkout@v2
 
-  deploy:
-    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'deploy')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: echo "Deploying the application..."
+      - name: Set environment variables using Python
+        id: set-env-vars
+        run: |
+          python .github/scripts/set_env_vars.py ${{ matrix.environment }}
+      
+      - name: Display the variable
+        if: |
+           (github.event.name == 'push' && ${{ matrix.environment }} == 'qa')
+        run: |
+           echo $app_service_name
+           echo $publish_profile
+
+
+      # - name: Deploy to Azure App Service
+      #   if: |
+      #     (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')) ||
+      #     (github.event_name == 'pull_request' && github.base_ref == 'main')
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: ${{ steps.set-env-vars.outputs.app_service_name }}
+      #     publish-profile: ${{ steps.set-env-vars.outputs.publish_profile }}
+      #     package: .
+
+
