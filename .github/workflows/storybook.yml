@@ -32,7 +32,7 @@ jobs:
               run: |
                 # swa deploy ./storybook-static --deployment-token ${{ secrets.AZURE_STATIC_WEB_APP_TOKEN }}
                 echo "Deploying ........."
-                echo "${{ github.event.pull_request.labels.*.name }}"
+                echo "${{ github.event.pull_request.labels.*.name }}" 
  
             # - name: Upload Artifact
             #   uses: actions/upload-artifact@v4
