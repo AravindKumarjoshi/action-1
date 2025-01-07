@@ -1,4 +1,4 @@
-name: Storybook Workflow
+name: Storybook PR Workflow
 
 on:
   pull_request:
@@ -8,17 +8,13 @@ on:
     paths-ignore:
       - '.github/**'
 
-  workflow_run:
-    workflows: ["Storybook Workflow"]
-    types:
-      - completed
-
 jobs:
   storybook-preview:
     if: contains(github.event.pull_request.labels.*.name, 'storybook')
     runs-on: ubuntu-latest
     
     steps:
+
       - name: Deploy to Azure Static Web App (Preview)
         run: |
           # Add your Azure deployment commands for the preview environment
@@ -33,21 +29,3 @@ jobs:
           name: pr-info
           path: pr_info.json
 
-  post-merge:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
-    needs: storybook-preview
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Use PR Information
-        run: |
-          PR_INFO=$(cat pr_info.json)
-          echo "Using PR Information: $PR_INFO"
-          # Add your post-merge steps here using the PR information
-          echo "Running post-merge job with main branch code"
-
-      - name: Deploy to Azure Static Web App (Production)
-        run: |
-          # Add your Azure deployment commands for the production environment
-          echo "Deploying Storybook to Azure static web app production environment"
