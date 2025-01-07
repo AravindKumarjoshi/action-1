@@ -41,14 +41,14 @@ jobs:
             #     path: storybook-static
 
 
-    post-merge: 
-       if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
-       needs: build 
-       runs-on: ubuntu-latest
+    # post-merge: 
+    #    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    #    needs: build 
+    #    runs-on: ubuntu-latest
 
-       steps:
-         - run: |
-              echo "${{ github.ref }}
+    #    steps:
+    #      - run: |
+    #           echo "${{ github.ref }}
        
     # deploy:
  
