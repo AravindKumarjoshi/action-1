@@ -23,7 +23,7 @@ jobs:
 
   job2:
     # needs: job1
-    if: (github.event.action == 'closed') && (contains(github.event.pull_request.labels.*.name, 'storybook')) 
+    if: (contains(github.event.pull_request.labels.*.name, 'storybook')) && (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
