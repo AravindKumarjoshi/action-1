@@ -13,4 +13,6 @@ jobs:
 
     steps:
       - name: echo
-        run: echo "running"
+        run: |
+         echo "running"
+         echo "${{ github.ref }}
