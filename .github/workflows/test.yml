@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: log
-        run: git log -1 --oneline
+        run: git log -10 --oneline
 
       - name: Run job for open and synchronize
         run: echo "Job 1 running for PR"
@@ -27,10 +27,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Wait for 2 minutes 
+        run: sleep 120
       - name: Checkout code
         uses: actions/checkout@v3
       - name: log
-        run: git log -1 --oneline
+        run: git log -10 --oneline
 
       - name: Run job for PR close
         run: |
