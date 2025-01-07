@@ -1,18 +1,25 @@
 name: Storybook Post-Merge Workflow
 
 on:
-  workflow_run:
-    workflows: ["StoryBook Deployment"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   post-merge:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
-      - name: echo
+
+      - name: Use PR Information
         run: |
-         echo "running"
-         echo "${{ github.ref }}
+          PR_INFO=$(cat pr_info.json)
+          echo "Using PR Information: $PR_INFO"
+          # Add your post-merge steps here using the PR information
+          echo "Running post-merge job with main branch code"
+
+      - name: Deploy to Azure Static Web App (Production)
+        run: |
+          # Add your Azure deployment commands for the production environment
+          echo "Deploying Storybook to Azure static web app production environment"
+
