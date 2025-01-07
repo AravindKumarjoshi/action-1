@@ -1,0 +1,35 @@
+name: PR Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches: [main]
+
+jobs:
+  job1:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run job for open and synchronize
+        run: echo "Job 1 running for PR"
+
+  job2:
+    needs: job1
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run job for PR close
+        run: |
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "PR has been merged. Running job 2."
+          else
+            echo "PR was closed without merging."
+          fi

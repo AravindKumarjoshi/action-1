@@ -1,0 +1,29 @@
+name: Storybook Post-Merge Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  post-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download PR Information 
+        uses: actions/download-artifact@v4
+        with: 
+          name: pr-info
+
+      - name: Use PR Information
+        run: |
+          PR_INFO=$(cat pr_info.json)
+          echo "Using PR Information: $PR_INFO"
+          # Add your post-merge steps here using the PR information
+          echo "Running post-merge job with main branch code"
+
+      - name: Deploy to Azure Static Web App (Production)
+        run: |
+          # Add your Azure deployment commands for the production environment
+          echo "Deploying Storybook to Azure static web app production environment"
+
