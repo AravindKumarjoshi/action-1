@@ -1,0 +1,16 @@
+name: Storybook Post-Merge Workflow
+
+on:
+  workflow_run:
+    workflows: ["StoryBook Deployment"]
+    types:
+      - completed
+
+jobs:
+  post-merge:
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: echo
+        run: echo "running"
