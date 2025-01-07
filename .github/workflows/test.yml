@@ -2,29 +2,35 @@ name: PR Workflow
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [labeled, synchronize, closed]
     branches: [main]
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   job1:
-    if: github.event.action != 'closed'
+    if: (github.event.action != 'closed') && (contains(github.event.pull_request.labels.*.name, 'storybook'))
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: log
+        run: git log -1 --oneline
 
       - name: Run job for open and synchronize
         run: echo "Job 1 running for PR"
 
   job2:
     needs: job1
-    if: github.event.action == 'closed'
+    if: (github.event.action == 'closed') && (contains(github.event.pull_request.labels.*.name, 'storybook')) 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: log
+        run: git log -1 --oneline
 
       - name: Run job for PR close
         run: |
