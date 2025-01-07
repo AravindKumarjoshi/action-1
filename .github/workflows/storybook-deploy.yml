@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download PR Information 
+        uses: actions/download-artifact@v4
+        with: 
+          name: pr-info
 
       - name: Use PR Information
         run: |
