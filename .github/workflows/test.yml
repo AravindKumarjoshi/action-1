@@ -3,6 +3,7 @@ name: PR Workflow
 on:
   pull_request:
     types: [opened, synchronize, closed]
+    branches: [main]
 
 jobs:
   job1:
