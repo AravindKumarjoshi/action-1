@@ -7,7 +7,3 @@ example for tagging
 
 
 teting storybook workflow   
-
-
-
-test
