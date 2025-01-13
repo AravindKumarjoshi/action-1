@@ -1,19 +1,26 @@
 name: StoryBook Deployment
  
 on: 
+  push:
+    branches: 
+      - main
+      - dev
+    paths-ignore: 
+      - 'github/**'
   pull_request: 
-     types: [labeled] 
      branches:
-        - main 
+        - main
+        - dev 
      paths-ignore:
         - '.github/**'
+
  
 #env:
  
 jobs:
     build:
         runs-on: ubuntu-latest
-        if: contains(github.event.pull_request.labels.*.name, 'storybook')
+        if: (github.event_name == 'push') && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main')
         steps:
             # - uses: actions/checkout@v3
             # - name: Use Node.js 18
@@ -27,12 +34,20 @@ jobs:
            
             - name: Build the artifact
               run: echo "Building........."
-           
-            - name: Deploy to Preview Environment
+
+            - name: Deploy to DEV Environment
+              if: github.ref == 'refs/heads/dev'
               run: |
                 # swa deploy ./storybook-static --deployment-token ${{ secrets.AZURE_STATIC_WEB_APP_TOKEN }}
                 echo "Deploying ........."
-                echo "${{ github.event.pull_request.labels.*.name }}" 
+                echo "DEV Environment"
+           
+            - name: Deploy to MAIN Environment
+              if: github.ref == 'refs/heads/main'
+              run: |
+                # swa deploy ./storybook-static --deployment-token ${{ secrets.AZURE_STATIC_WEB_APP_TOKEN }}
+                echo "Deploying ........."
+                echo "MAIN Environment" 
  
             # - name: Upload Artifact
             #   uses: actions/upload-artifact@v4
