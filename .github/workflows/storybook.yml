@@ -25,9 +25,10 @@ jobs:
         - name: Checkout code
           run: |
               echo "PR check"
-              
+
     build:
         runs-on: ubuntu-latest
+        needs: PR_check
         if: (github.event_name == 'push') && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main')
         steps:
             # - uses: actions/checkout@v3
