@@ -18,6 +18,14 @@ on:
 #env:
  
 jobs:
+    PR_check:
+      name: check
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          run: |
+              echo "PR check"
+              
     build:
         runs-on: ubuntu-latest
         if: (github.event_name == 'push') && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main')
